@@ -35,6 +35,10 @@ module Fastlane
         UI.success("Successfully get app information!")
         # 应用二维码地址
         buildQRCodeURL = result["data"]["buildQRCodeURL"]
+        # 应用短连接后缀
+        shortURL = result["data"]["buildShortcutUrl"]
+        # 拼接下载链接
+        downloadURL = "https://www.pgyer.com/#{shortURL}"
 
         # 将应用信息发送到钉钉
         uri = URI.parse("https://oapi.dingtalk.com/robot/send?access_token=#{access_token}")
@@ -44,8 +48,8 @@ module Fastlane
         req.body = { 
           'msgtype' => 'markdown',
           'markdown' => {
-            'title': 'A new app update from fastlane.', 
-            'text': "#{markdown_desc} <br> ![](#{buildQRCodeURL})"
+            'title': 'A new app update from fastlane. ', 
+            'text': "#### [#{downloadURL}](#{downloadURL}) \n ![](#{buildQRCodeURL}) \n> #{markdown_desc} "
           },
           'at': {
             'atMobiles': [], 
